@@ -18,19 +18,26 @@
 const login = document.querySelector("#login");
 const register = document.querySelector("#register");
 const logout = document.querySelector("#logout");
-
+const emailVal = document.querySelector("#emailVal");
+const passwordVal = document.querySelector("#passwordVal");
 
 //Login
 login.addEventListener("click", e => {
   e.preventDefault();
-  console.log("login button clicked")
+  console.log("login clicked")
+
+  let email = emailVal.value;
+  let password = passwordVal.value;
+
+  firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
+    // Handle Errors here.
+    var errorCode = error.code;
+    var errorMessage = error.message;
+    console.log(`${errorCode}: ${errorMessage}`)
+  });
+
 })
-// firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
-//   // Handle Errors here.
-//   var errorCode = error.code;
-//   var errorMessage = error.message;
-//   // ...
-// });
+
 
 // //Sign Up
 // firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
