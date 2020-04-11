@@ -21,14 +21,6 @@ const logout = document.querySelector("#logout");
 const emailVal = document.querySelector("#emailVal");
 const passwordVal = document.querySelector("#passwordVal");
 
-let user = firebase.auth().currentUser;
-
-if (user) {
-  console.log("logged in")
-} else {
-  console.log("User logged out")
-}
-
 //Login
 login.addEventListener("click", e => {
   e.preventDefault();
@@ -37,14 +29,15 @@ login.addEventListener("click", e => {
   let email = emailVal.value;
   let password = passwordVal.value;
 
-  firebase.auth().signInWithEmailAndPassword(email, password).catch(error => {
+  firebase.auth()
+  .signInWithEmailAndPassword(email, password)
+  .catch(error => {
     // Handle Errors here.
     let errorCode = error.code;
     let errorMessage = error.message;
     console.log(`${errorCode}: ${errorMessage}`)
-  });
+  })
 });
-
 
 //Register
 register.addEventListener("click", e => {
@@ -54,29 +47,52 @@ register.addEventListener("click", e => {
   let email = emailVal.value;
   let password = passwordVal.value;
 
-  firebase.auth().createUserWithEmailAndPassword(email, password).catch(error => {
+  firebase.auth()
+  .createUserWithEmailAndPassword(email, password)
+  .then(() => {
+    console.log("Sign-out successful")
+  })
+  .catch(error => {
     // Handle Errors here.
     let errorCode = error.code;
     let errorMessage = error.message;
     console.log(`${errorCode}: ${errorMessage}`)
 
-  }).finally(data => {
-    console.log(email,password)
-  });
+  })
 });
-
 
 // Logout
 logout.addEventListener("click", e => {
   e.preventDefault();
-  console.log("logout clicked")
 
-  firebase.auth().signOut().then(function () {
-    // Sign-out successful.
+  firebase.auth()
+  .signOut()
+  .then(() => {
+    console.log("Sign-out successful") 
   }).catch(function (error) {
     // An error happened.
     let errorCode = error.code;
     let errorMessage = error.message;
     console.log(`${errorCode}: ${errorMessage}`)
   });
+});
+
+//Checking if user logged in out out 
+firebase.auth()
+.onAuthStateChanged(user => {
+  if (user) {
+    // User is signed in.
+    console.log("user is signed in")
+    // var displayName = user.displayName;
+    // var email = user.email;
+    // var emailVerified = user.emailVerified;
+    // var photoURL = user.photoURL;
+    // var isAnonymous = user.isAnonymous;
+    // var uid = user.uid;
+    // var providerData = user.providerData;
+    
+  } else {
+    // User is signed out.
+    console.log("user is signed out")
+  }
 });
