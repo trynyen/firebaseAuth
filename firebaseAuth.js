@@ -46,8 +46,7 @@ login.addEventListener("click", e => {
       console.log("logged in")
     }
   });
-
-})
+});
 
 
 //Register
@@ -66,13 +65,21 @@ register.addEventListener("click", e => {
 
   }).finally(data => {
     console.log(data)
-  })
-})
+  });
+});
 
-// // Logout
-// firebase.auth().signOut().then(function() {
-//   // Sign-out successful.
-// }).catch(function(error) {
-//   // An error happened.
-// });
 
+// Logout
+logout.addEventListener("click", e => {
+  e.preventDefault();
+  console.log("logout clicked")
+
+  firebase.auth().signOut().then(function () {
+    // Sign-out successful.
+  }).catch(function (error) {
+    // An error happened.
+    let errorCode = error.code;
+    let errorMessage = error.message;
+    console.log(`${errorCode}: ${errorMessage}`)
+  });
+});
