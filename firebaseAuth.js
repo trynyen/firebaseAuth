@@ -37,14 +37,11 @@ login.addEventListener("click", e => {
   let email = emailVal.value;
   let password = passwordVal.value;
 
-  firebase.auth().signInWithEmailAndPassword(email, password).catch(function (error) {
+  firebase.auth().signInWithEmailAndPassword(email, password).catch(error => {
     // Handle Errors here.
     let errorCode = error.code;
     let errorMessage = error.message;
     console.log(`${errorCode}: ${errorMessage}`)
-    if (user) {
-      console.log("logged in")
-    }
   });
 });
 
@@ -64,7 +61,7 @@ register.addEventListener("click", e => {
     console.log(`${errorCode}: ${errorMessage}`)
 
   }).finally(data => {
-    console.log(data)
+    console.log(email,password)
   });
 });
 
