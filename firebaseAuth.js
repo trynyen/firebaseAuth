@@ -15,6 +15,7 @@ firebase.analytics();
 
 // Initialize the FirebaseUI Widget using Firebase.
 // const ui = new firebaseui.auth.AuthUI(firebase.auth());
+
 const login = document.querySelector("#login");
 const register = document.querySelector("#register");
 const logout = document.querySelector("#logout");
@@ -78,6 +79,7 @@ logout.addEventListener("click", e => {
 });
 
 //Checking if user logged in out out 
+
 firebase.auth()
 .onAuthStateChanged(user => {
   if (user) {
