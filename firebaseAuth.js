@@ -49,8 +49,8 @@ register.addEventListener("click", e => {
 
   firebase.auth()
   .createUserWithEmailAndPassword(email, password)
-  .then(() => {
-    console.log("Sign-out successful")
+  .then(userCred => {
+    return userCred.user.displayName ? console.log(userCred.user.displayName) : console.log(userCred.user.updateProfile({displayName:"ELEPHANT"}))
   })
   .catch(error => {
     // Handle Errors here.
@@ -83,8 +83,9 @@ firebase.auth()
   if (user) {
     // User is signed in.
     console.log("user is signed in")
-    // var displayName = user.displayName;
-    // var email = user.email;
+    var displayName = user.displayName;
+    var email = user.email;
+    console.log(email, displayName)
     // var emailVerified = user.emailVerified;
     // var photoURL = user.photoURL;
     // var isAnonymous = user.isAnonymous;
