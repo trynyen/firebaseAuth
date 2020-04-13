@@ -24,7 +24,7 @@ const logout = document.querySelector("#logout");
 const emailVal = document.querySelector("#emailVal");
 const passwordVal = document.querySelector("#passwordVal");
 const clickBtn = document.querySelector("#click-button")
-
+let clickVal = document.querySelector("#click-value")
 
 //Login
 login.addEventListener("click", e => {
@@ -116,8 +116,8 @@ clickBtn.addEventListener("click", function () {
         // Add to clickCounter
         clickCounter++;
 
-        //  Store Click Data to Firebase in a JSON property called clickCount
-        // Note how we are using the Firebase .set() method
+        //Store Click Data to Firebase in a JSON property called clickCount
+        //Note how we are using the Firebase .set() method
         //Remember to update rules to allow user to read and/or write
         database.ref().set({
           clickCount: clickCounter
@@ -128,3 +128,30 @@ clickBtn.addEventListener("click", function () {
       }
     })
 })
+
+// MAIN PROCESS + INITIAL CODE
+    // --------------------------------------------------------------------------------
+
+    // Using .on("value", function(snapshot)) syntax will retrieve the data
+    // from the database (both initially and every time something changes)
+    // This will then store the data inside the variable "snapshot". We could rename "snapshot" to anything.
+    database.ref().on("value", function(snapshot) {
+
+      // Then we console.log the value of snapshot
+      console.log(snapshot.val());
+
+      // Update the clickCounter variable with data from the database.
+      clickCounter = snapshot.val().clickCount;
+
+      // Then we change the html associated with the number.
+      // $("#click-value").text(snapshot.val().clickCount);
+      clickVal.textContent = clickCounter;
+
+
+      // If there is an error that Firebase runs into -- it will be stored in the "errorObject"
+      // Again we could have named errorObject anything we wanted.
+    }, function(errorObject) {
+
+      // In case of error this will print the error
+      console.log("The read failed: " + errorObject.code);
+    });
