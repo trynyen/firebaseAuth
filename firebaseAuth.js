@@ -109,9 +109,8 @@ firebase.auth()
 
 //Check real time database
 clickBtn.addEventListener("click", function () {
-  firebase.auth()
-    .onAuthStateChanged(user => {
-      if (user) {
+  var currUser = firebase.auth().currentUser
+      if (currUser) {
 
         // Add to clickCounter
         clickCounter++;
@@ -126,7 +125,6 @@ clickBtn.addEventListener("click", function () {
         // User is signed out.
         console.log("user is not logged in")
       }
-    })
 })
 
 // MAIN PROCESS + INITIAL CODE
