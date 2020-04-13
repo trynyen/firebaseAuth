@@ -15,12 +15,16 @@ firebase.analytics();
 
 // Initialize the FirebaseUI Widget using Firebase.
 // const ui = new firebaseui.auth.AuthUI(firebase.auth());
+const database = firebase.database();
+let clickCounter = 0;
 
 const login = document.querySelector("#login");
 const register = document.querySelector("#register");
 const logout = document.querySelector("#logout");
 const emailVal = document.querySelector("#emailVal");
 const passwordVal = document.querySelector("#passwordVal");
+const clickBtn = document.querySelector("#click-button")
+
 
 //Login
 login.addEventListener("click", e => {
@@ -31,13 +35,13 @@ login.addEventListener("click", e => {
   let password = passwordVal.value;
 
   firebase.auth()
-  .signInWithEmailAndPassword(email, password)
-  .catch(error => {
-    // Handle Errors here.
-    let errorCode = error.code;
-    let errorMessage = error.message;
-    console.log(`${errorCode}: ${errorMessage}`)
-  })
+    .signInWithEmailAndPassword(email, password)
+    .catch(error => {
+      // Handle Errors here.
+      let errorCode = error.code;
+      let errorMessage = error.message;
+      console.log(`${errorCode}: ${errorMessage}`)
+    })
 });
 
 //Register
@@ -49,17 +53,17 @@ register.addEventListener("click", e => {
   let password = passwordVal.value;
 
   firebase.auth()
-  .createUserWithEmailAndPassword(email, password)
-  .then(userCred => {
-    return userCred.user.displayName ? console.log(userCred.user.displayName) : console.log(userCred.user.updateProfile({displayName:"ELEPHANT"}))
-  })
-  .catch(error => {
-    // Handle Errors here.
-    let errorCode = error.code;
-    let errorMessage = error.message;
-    console.log(`${errorCode}: ${errorMessage}`)
+    .createUserWithEmailAndPassword(email, password)
+    .then(userCred => {
+      return userCred.user.displayName ? console.log(userCred.user.displayName) : console.log(userCred.user.updateProfile({ displayName: "ELEPHANT" }))
+    })
+    .catch(error => {
+      // Handle Errors here.
+      let errorCode = error.code;
+      let errorMessage = error.message;
+      console.log(`${errorCode}: ${errorMessage}`)
 
-  })
+    })
 });
 
 // Logout
@@ -67,35 +71,60 @@ logout.addEventListener("click", e => {
   e.preventDefault();
 
   firebase.auth()
-  .signOut()
-  .then(() => {
-    console.log("Sign-out successful") 
-  }).catch(function (error) {
-    // An error happened.
-    let errorCode = error.code;
-    let errorMessage = error.message;
-    console.log(`${errorCode}: ${errorMessage}`)
-  });
+    .signOut()
+    .then(() => {
+      console.log("Sign-out successful")
+    }).catch(function (error) {
+      // An error happened.
+      let errorCode = error.code;
+      let errorMessage = error.message;
+      console.log(`${errorCode}: ${errorMessage}`)
+    });
 });
 
 //Checking if user logged in out out 
 
 firebase.auth()
-.onAuthStateChanged(user => {
-  if (user) {
-    // User is signed in.
-    console.log("user is signed in")
-    var displayName = user.displayName;
-    var email = user.email;
-    console.log(email, displayName)
-    // var emailVerified = user.emailVerified;
-    // var photoURL = user.photoURL;
-    // var isAnonymous = user.isAnonymous;
-    // var uid = user.uid;
-    // var providerData = user.providerData;
-    
-  } else {
-    // User is signed out.
-    console.log("user is signed out")
-  }
-});
+  .onAuthStateChanged(user => {
+    if (user) {
+      // click()
+      // User is signed in.
+      console.log(user)
+      console.log("user is signed in")
+      var displayName = user.displayName;
+      var email = user.email;
+      console.log(email, displayName)
+      // var emailVerified = user.emailVerified;
+      // var photoURL = user.photoURL;
+      // var isAnonymous = user.isAnonymous;
+      // var uid = user.uid;
+      // var providerData = user.providerData;
+
+    } else {
+      // User is signed out.
+      console.log("user is signed out")
+    }
+  });
+
+
+//Check real time database
+clickBtn.addEventListener("click", function () {
+  firebase.auth()
+    .onAuthStateChanged(user => {
+      if (user) {
+
+        // Add to clickCounter
+        clickCounter++;
+
+        //  Store Click Data to Firebase in a JSON property called clickCount
+        // Note how we are using the Firebase .set() method
+        //Remember to update rules to allow user to read and/or write
+        database.ref().set({
+          clickCount: clickCounter
+        })
+      } else {
+        // User is signed out.
+        console.log("user is not logged in")
+      }
+    })
+})
